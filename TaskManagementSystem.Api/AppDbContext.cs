@@ -5,5 +5,5 @@ using TaskManagementSystem.Api.Entities;
 
 public class AppDbContext(DbContextOptions<AppDbContext> opts) : DbContext(opts)
 {
-    public DbSet<Task> Tasks => Set<Task>();
+    public DbSet<ToDoTask> Tasks => Set<ToDoTask>();
 }

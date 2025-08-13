@@ -2,7 +2,7 @@
 
 namespace TaskManagementSystem.Api.Entities;
 
-public class Task
+public class ToDoTask
 {
     public Guid Id { get; set; }
 
