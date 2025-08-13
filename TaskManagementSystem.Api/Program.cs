@@ -1,9 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using TaskManagementSystem.Api;
+using TaskManagementSystem.Api.Repositories;
+using TaskManagementSystem.Api.Repositories.Interfaces;
+using TaskManagementSystem.Api.Services;
+using TaskManagementSystem.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
