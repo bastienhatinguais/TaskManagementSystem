@@ -1,11 +1,14 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using TaskManagementSystem.Api.Entities;
 using TaskManagementSystem.Api.Services.Interfaces;
+using TaskManagementSystem.Shared.DTOs;
 
 namespace TaskManagementSystem.Api.Controllers;
 [ApiController]
 [Route("[controller]")]
-public class TaskController(ITaskService taskService) : ControllerBase
+public class TaskController(ITaskService taskService, IMapper mapper) : ControllerBase
 {
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetTaskById(int id)
@@ -15,14 +18,14 @@ public class TaskController(ITaskService taskService) : ControllerBase
         {
             return NotFound();
         }
-        return Ok(task);
+        return Ok(mapper.Map<TaskDto>(task));
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllTasks()
     {
         var tasks = await taskService.GetAllTasksAsync();
-        return Ok(tasks);
+        return Ok(mapper.Map<List<TaskDto>>(tasks));
     }
 
     [HttpPost]
@@ -49,6 +52,6 @@ public class TaskController(ITaskService taskService) : ControllerBase
             return NotFound();
         }
         var updatedTask = await taskService.UpdateTaskAsync(task);
-        return Ok(updatedTask);
+        return Ok(mapper.Map<TaskDto>(updatedTask));
     }
 }

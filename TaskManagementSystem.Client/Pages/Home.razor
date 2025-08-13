@@ -1,15 +1,32 @@
 ﻿@page "/"
+@using TaskManagementSystem.Shared.DTOs
 @inject HttpClient Http
 
 <PageTitle>Home</PageTitle>
 
-<h1 class="text-4xl font-bold underline">
-    Hello world!
-</h1>
+@if (tasks is null)
+{
+    <p>Loading...</p>
+}
+else if (tasks.Count == 0)
+{
+    <p>No tasks.</p>
+}
+else
+{
+    <ul>
+        @foreach (var task in tasks)
+        {
+            <li>@task.Title</li>
+        }
+    </ul>
+}
 
 @code {
+    private List<TaskDto>? tasks;
+
     protected override async Task OnInitializedAsync()
     {
-        var test = await Http.GetFromJsonAsync<object>("task");
+        tasks = await Http.GetFromJsonAsync<List<TaskDto>>("task");
     }
 }
