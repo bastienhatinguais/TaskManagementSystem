@@ -7,5 +7,5 @@ public interface ITaskService
     Task<ToDoTask> AddTaskAsync(ToDoTask task);
     Task<List<ToDoTask>> GetAllTasksAsync();
     Task<ToDoTask?> GetTaskByIdAsync(int id);
-    ToDoTask UpdateTask(ToDoTask task);
+    Task<ToDoTask> UpdateTaskAsync(ToDoTask task);
 }

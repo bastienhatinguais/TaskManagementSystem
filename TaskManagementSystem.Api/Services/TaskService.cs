@@ -9,7 +9,17 @@ public class TaskService(ITaskRepository taskRepository) : ITaskService
 
     public Task<List<ToDoTask>> GetAllTasksAsync() => taskRepository.GetAllAsync();
 
-    public Task<ToDoTask> AddTaskAsync(ToDoTask task) => taskRepository.AddAsync(task);
+    public async Task<ToDoTask> AddTaskAsync(ToDoTask task)
+    {
+        var added = await taskRepository.AddAsync(task);
+        await taskRepository.SaveAllAsync(); 
+        return added;
+    }
 
-    public ToDoTask UpdateTask(ToDoTask task) => taskRepository.Update(task);
+    public async Task<ToDoTask> UpdateTaskAsync(ToDoTask task)
+    {
+        var updated = taskRepository.Update(task);
+        await taskRepository.SaveAllAsync(); 
+        return updated;
+    }
 }

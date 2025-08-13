@@ -11,4 +11,5 @@ public interface IBaseRepository<T> where T : class
     Task<T?> GetByIdAsync(int id);
     void Attach(T entity);
     void AttachRange(IEnumerable<T> entities);
+    Task<bool> SaveAllAsync();
 }

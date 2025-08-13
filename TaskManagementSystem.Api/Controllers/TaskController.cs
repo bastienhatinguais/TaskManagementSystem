@@ -37,7 +37,7 @@ public class TaskController(ITaskService taskService) : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public IActionResult UpdateTask(int id, ToDoTask task)
+    public async Task<IActionResult> UpdateTaskAsync(int id, ToDoTask task)
     {
         if (task == null)
         {
@@ -48,9 +48,7 @@ public class TaskController(ITaskService taskService) : ControllerBase
         {
             return NotFound();
         }
-        var updatedTask = taskService.UpdateTask(task);
+        var updatedTask = await taskService.UpdateTaskAsync(task);
         return Ok(updatedTask);
     }
-
-
 }
