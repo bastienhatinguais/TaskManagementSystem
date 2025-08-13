@@ -1,7 +1,15 @@
 ﻿@page "/"
+@inject HttpClient Http
 
 <PageTitle>Home</PageTitle>
 
 <h1 class="text-4xl font-bold underline">
     Hello world!
 </h1>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var test = await Http.GetFromJsonAsync<object>("task");
+    }
+}

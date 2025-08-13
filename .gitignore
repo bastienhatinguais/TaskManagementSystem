@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /TaskManagementSystem.Client/package-lock.json
 /TaskManagementSystem.Api/tailwind.extension.json
+/TaskManagementSystem.Client/Styles/input.output.css
