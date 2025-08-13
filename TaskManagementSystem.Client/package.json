@@ -1,0 +1,19 @@
+{
+  "name": "taskmanagementsystem.client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tw:build": "npx @tailwindcss/cli -i ./Styles/input.css -o ./wwwroot/tailwind.css",
+    "tw:watch": "npx @tailwindcss/cli -i ./Styles/input.css -o ./wwwroot/tailwind.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.11",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11"
+  }
+}
