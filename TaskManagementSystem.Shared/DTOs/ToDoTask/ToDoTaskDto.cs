@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-namespace TaskManagementSystem.Shared.DTOs;
+namespace TaskManagementSystem.Shared.DTOs.ToDoTask;
 
-public class TaskDto
+public class ToDoTaskDto
 {
     public Guid Id { get; set; }
 
