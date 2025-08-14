@@ -7,7 +7,7 @@ public abstract class BaseRepository<T>(AppDbContext context) : IBaseRepository<
 {
     protected readonly DbSet<T> DbSet = context.Set<T>();
 
-    public async Task<T?> GetByIdAsync(int id) => await DbSet.FindAsync(id);
+    public async Task<T?> GetByIdAsync(Guid id) => await DbSet.FindAsync(id);
 
     public T Update(T entity) => DbSet.Update(entity).Entity;
 

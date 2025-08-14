@@ -8,7 +8,7 @@ public interface IBaseRepository<T> where T : class
 
     T Update(T entity);
     Task<List<T>> GetAllAsync();
-    Task<T?> GetByIdAsync(int id);
+    Task<T?> GetByIdAsync(Guid id);
     void Attach(T entity);
     void AttachRange(IEnumerable<T> entities);
     Task<bool> SaveAllAsync();
