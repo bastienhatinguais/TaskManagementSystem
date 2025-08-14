@@ -1,0 +1,71 @@
+﻿@using TaskManagementSystem.Shared.DTOs
+@using TaskManagementSystem.Shared.DTOs.ToDoTask
+
+<EditForm Model="ToDoTask" OnValidSubmit="HandleSubmit" class="mx-auto w-full max-w-2xl">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="mb-4 text-sm text-red-600" />
+
+    <div class="space-y-6 rounded p-6 shadow-sm">
+        <div>
+            <label class="mb-3 text-sm font-medium text-gray-700" for="title">Title</label>
+            <InputText id="title"
+                       @bind-Value="ToDoTask.Title"
+                       class="w-full rounded border border-gray-300 px-3 py-2
+                              focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <ValidationMessage For="() => ToDoTask.Title" class="mt-1 text-sm text-red-600" />
+        </div>
+
+        <div>
+            <label class="mb-3 text-sm font-medium text-gray-700" for="desc">Description</label>
+            <InputTextArea id="desc"
+                           @bind-Value="ToDoTask.Description"
+                           class="min-h-[120px] w-full rounded border border-gray-300 px-3 py-2
+                                  focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <ValidationMessage For="() => ToDoTask.Description" class="mt-1 text-sm text-red-600" />
+        </div>
+
+        <div class="flex flex-col">
+            <label class="text-sm font-medium text-gray-700" for="due">Due date</label>
+            <InputDate DateFormat="yyyy-MM-dd"
+                       id="due"
+                       @bind-Value="ToDoTask.DueDate"
+                       class="w-1/2 rounded border border-gray-300 px-3 py-2
+                                  focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <ValidationMessage For="() => ToDoTask.DueDate" class="mt-1 text-sm text-red-600" />
+        </div>
+
+
+        <div>
+            <label class="inline-flex items-center space-x-2">
+                <span class="text-sm font-medium text-gray-700">Completed</span>
+                <InputCheckbox @bind-Value="ToDoTask.IsCompleted"
+                               class="size-6 border-gray-300 text-blue-600 focus:ring-blue-500" />
+            </label>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-2">
+            <button type="button"
+                    @onclick="HandleCancel"
+                    class="cursor-pointer items-center rounded border border-gray-300 px-4 py-2
+                           text-sm text-gray-700 hover:bg-gray-50">
+                Cancel
+            </button>
+
+            <button type="submit"
+                    class="cursor-pointer items-center rounded bg-blue-600 px-4 py-2 text-sm
+                           font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                Save
+            </button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public ToDoTaskDto ToDoTask { get; set; } = new();
+
+    [Parameter] public EventCallback<ToDoTaskDto> Submit { get; set; }
+    [Parameter] public EventCallback Cancel { get; set; }
+
+    private Task HandleSubmit() => Submit.InvokeAsync(ToDoTask);
+    private Task HandleCancel() => Cancel.InvokeAsync();
+}

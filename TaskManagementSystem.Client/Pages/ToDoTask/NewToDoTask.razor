@@ -1,0 +1,26 @@
+﻿@page "/task/new"
+@using TaskManagementSystem.Client.Components.ToDoTask
+@using TaskManagementSystem.Shared.DTOs
+@using TaskManagementSystem.Shared.DTOs.ToDoTask
+@inject HttpClient Http
+
+<PageTitle>New Task</PageTitle>
+
+<h1 class="text-blue text-center text-2xl font-semibold">Add task</h1>
+<ToDoTaskForm ToDotask="task" 
+              Submit="CreateTask"
+              Cancel="GoBack" />
+
+@code {
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    private ToDoTaskDto task = new() { DueDate = DateTime.Today };
+
+    private async Task CreateTask(ToDoTaskDto task)
+    {
+        await Http.PostAsJsonAsync($"api/task", task);
+        Navigation.NavigateTo("/task");
+    }
+
+    private void GoBack() => Navigation.NavigateTo("/task");
+}

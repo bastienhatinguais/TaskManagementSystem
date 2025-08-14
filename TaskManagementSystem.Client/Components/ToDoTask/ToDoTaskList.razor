@@ -1,0 +1,14 @@
+﻿@using TaskManagementSystem.Shared.DTOs
+@using TaskManagementSystem.Shared.DTOs.ToDoTask
+
+
+<div class="flex flex-col gap-4 rounded p-3">
+    @foreach (var task in ToDoTasks)
+    {
+        <ToDoTaskItem ToDoTask="@task" />
+    }
+</div>
+
+@code {
+    [Parameter] public required List<ToDoTaskDto> ToDoTasks { get; set; }
+}

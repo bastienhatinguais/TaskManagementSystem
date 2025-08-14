@@ -1,0 +1,30 @@
+﻿@page "/task/{id:guid}/edit"
+@using TaskManagementSystem.Client.Components.ToDoTask
+@using TaskManagementSystem.Shared.DTOs.ToDoTask
+@inject HttpClient Http
+
+<PageTitle>Edit Task</PageTitle>
+
+<h1 class="text-center text-2xl font-semibold">Edit task</h1>
+<ToDoTaskForm ToDotask="task"
+              Submit="EditTask"
+              Cancel="GoBack" />
+
+@code {
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    [Parameter] public Guid id { get; set; }
+
+    ToDoTaskDto? task;
+
+    protected override async Task OnParametersSetAsync()
+        => task = await Http.GetFromJsonAsync<ToDoTaskDto>($"api/task/{id}");
+
+    private async Task EditTask(ToDoTaskDto task)
+    {
+        await Http.PutAsJsonAsync($"api/task/{id}", task);
+        Navigation.NavigateTo("/task");
+    }
+
+    private void GoBack() => Navigation.NavigateTo("/task");
+}
