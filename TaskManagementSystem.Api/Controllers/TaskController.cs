@@ -1,57 +1,50 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using TaskManagementSystem.Api.Entities;
 using TaskManagementSystem.Api.Services.Interfaces;
-using TaskManagementSystem.Shared.DTOs;
+using TaskManagementSystem.Shared.DTOs.ToDoTask;
 
 namespace TaskManagementSystem.Api.Controllers;
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class TaskController(ITaskService taskService, IMapper mapper) : ControllerBase
 {
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetTaskById(int id)
+    public async Task<IActionResult> GetTaskByIdAsync(Guid id)
     {
         var task = await taskService.GetTaskByIdAsync(id);
         if (task == null)
         {
             return NotFound();
         }
-        return Ok(mapper.Map<TaskDto>(task));
+        return Ok(mapper.Map<ToDoTaskDto>(task));
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllTasks()
+    public async Task<IActionResult> GetAllTasksAsync()
     {
         var tasks = await taskService.GetAllTasksAsync();
-        return Ok(mapper.Map<List<TaskDto>>(tasks));
+        return Ok(mapper.Map<List<ToDoTaskDto>>(tasks));
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddTask(ToDoTask task)
+    public async Task<IActionResult> AddTaskAsync(ToDoTaskUpsertDto task)
     {
-        if (task == null)
-        {
-            return BadRequest();
-        }
         var createdTask = await taskService.AddTaskAsync(task);
-        return CreatedAtAction(nameof(GetTaskById), new { id = createdTask.Id }, createdTask);
+        return CreatedAtAction(nameof(GetTaskByIdAsync), new { id = createdTask.Id }, mapper.Map<ToDoTaskDto>(createdTask));
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateTaskAsync(int id, ToDoTask task)
+    public async Task<IActionResult> UpdateTaskAsync(Guid id, ToDoTaskUpsertDto task)
     {
-        if (task == null)
+        try
         {
-            return BadRequest();
+            var  updatedTask = await taskService.UpdateTaskAsync(id, task);
+            return Ok(mapper.Map<ToDoTaskDto>(updatedTask));
         }
-        var existingTask = taskService.GetTaskByIdAsync(id).Result;
-        if (existingTask == null)
+        catch (InvalidOperationException ex)
         {
-            return NotFound();
+            return NotFound(ex.Message);
         }
-        var updatedTask = await taskService.UpdateTaskAsync(task);
-        return Ok(mapper.Map<TaskDto>(updatedTask));
     }
 }
