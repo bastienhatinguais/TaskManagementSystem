@@ -1,7 +1,7 @@
 ﻿@page "/task/{id:guid}/edit"
 @using TaskManagementSystem.Client.Components.ToDoTask
 @using TaskManagementSystem.Shared.DTOs.ToDoTask
-@inject HttpClient Http
+@inject ITaskService TaskService
 
 <PageTitle>Edit Task</PageTitle>
 
@@ -15,15 +15,32 @@
 
     [Parameter] public Guid id { get; set; }
 
-    ToDoTaskDto? task;
+    ToDoTaskUpsertDto? task;
 
     protected override async Task OnParametersSetAsync()
-        => task = await Http.GetFromJsonAsync<ToDoTaskDto>($"api/task/{id}");
-
-    private async Task EditTask(ToDoTaskDto task)
     {
-        await Http.PutAsJsonAsync($"api/task/{id}", task);
-        Navigation.NavigateTo("/task");
+        var taskDto = await TaskService.GetAsync(id);
+        if (taskDto is null)
+        {
+            Navigation.NavigateTo("/task");
+            return;
+        }
+        task = new ToDoTaskUpsertDto
+            {
+                Title = taskDto.Title,
+                Description = taskDto.Description,
+                DueDate = taskDto.DueDate,
+                IsCompleted = taskDto.IsCompleted
+            };
+    }
+
+    private async Task EditTask(ToDoTaskUpsertDto task)
+    {
+        var response = await TaskService.UpdateAsync(id, task);
+        if (response.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/task");
+        }
     }
 
     private void GoBack() => Navigation.NavigateTo("/task");

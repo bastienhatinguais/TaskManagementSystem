@@ -1,7 +1,7 @@
 ﻿@using TaskManagementSystem.Shared.DTOs
 @using TaskManagementSystem.Shared.DTOs.ToDoTask
 @inject HttpClient Http
-
+@inject ITaskService TaskService
 
 @if (tasks is null)
 {
@@ -34,7 +34,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        tasks = await Http.GetFromJsonAsync<List<ToDoTaskDto>>("api/task");
+        tasks = await TaskService.ListAsync();
     }
 
     private void HandleEdit(ToDoTaskDto task)
@@ -44,7 +44,7 @@ else
 
     private async Task HandleDelete(ToDoTaskDto task)
     {
-        var response = await Http.DeleteAsync($"api/task/{task.Id}");
+        var response = await TaskService.DeleteAsync(task.Id);
         if (response.IsSuccessStatusCode)
         {
             tasks?.Remove(task);

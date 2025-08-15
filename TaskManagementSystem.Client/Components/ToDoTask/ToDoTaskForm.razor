@@ -60,9 +60,9 @@
 </EditForm>
 
 @code {
-    [Parameter] public ToDoTaskDto ToDoTask { get; set; } = new();
+    [Parameter] public ToDoTaskUpsertDto ToDoTask { get; set; } = new();
 
-    [Parameter] public EventCallback<ToDoTaskDto> Submit { get; set; }
+    [Parameter] public EventCallback<ToDoTaskUpsertDto> Submit { get; set; }
     [Parameter] public EventCallback Cancel { get; set; }
 
     private Task HandleSubmit() => Submit.InvokeAsync(ToDoTask);
