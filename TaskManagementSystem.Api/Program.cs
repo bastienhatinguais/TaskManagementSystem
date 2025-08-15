@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TaskManagementSystem.Api;
-using TaskManagementSystem.Api.MapperProfiles;
 using TaskManagementSystem.Api.Repositories;
 using TaskManagementSystem.Api.Repositories.Interfaces;
 using TaskManagementSystem.Api.Services;

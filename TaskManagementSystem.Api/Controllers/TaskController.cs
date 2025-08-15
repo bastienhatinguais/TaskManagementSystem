@@ -10,7 +10,7 @@ namespace TaskManagementSystem.Api.Controllers;
 public class TaskController(ITaskService taskService, IMapper mapper) : ControllerBase
 {
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetTaskByIdAsync(Guid id)
+    public async Task<IActionResult> GetTaskById(Guid id)
     {
         var task = await taskService.GetTaskByIdAsync(id);
         if (task == null)
@@ -21,21 +21,21 @@ public class TaskController(ITaskService taskService, IMapper mapper) : Controll
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllTasksAsync()
+    public async Task<IActionResult> GetAllTasks()
     {
         var tasks = await taskService.GetAllTasksAsync();
         return Ok(mapper.Map<List<ToDoTaskDto>>(tasks));
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddTaskAsync(ToDoTaskUpsertDto task)
+    public async Task<IActionResult> AddTask(ToDoTaskUpsertDto task)
     {
         var createdTask = await taskService.AddTaskAsync(task);
-        return CreatedAtAction(nameof(GetTaskByIdAsync), new { id = createdTask.Id }, mapper.Map<ToDoTaskDto>(createdTask));
+        return CreatedAtAction(nameof(GetTaskById), new { id = createdTask.Id }, mapper.Map<ToDoTaskDto>(createdTask));
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateTaskAsync(Guid id, ToDoTaskUpsertDto task)
+    public async Task<IActionResult> UpdateTask(Guid id, ToDoTaskUpsertDto task)
     {
         try
         {
@@ -49,7 +49,7 @@ public class TaskController(ITaskService taskService, IMapper mapper) : Controll
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteTaskAsync(Guid id)
+    public async Task<IActionResult> DeleteTask(Guid id)
     {
         try
         {
