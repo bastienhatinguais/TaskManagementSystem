@@ -20,14 +20,19 @@ public class TaskService(ITaskRepository taskRepository, IMapper mapper) : ITask
 
     public async Task<ToDoTask> UpdateTaskAsync(Guid id, ToDoTaskUpsertDto task)
     {
-        var existingTask = await taskRepository.GetByIdAsync(id);
-        if (existingTask == null)
-        {
-            throw new InvalidOperationException($"Task with id {id} not found.");
-        }
+        var existingTask = await taskRepository.GetByIdAsync(id) ?? throw new InvalidOperationException($"Task with id {id} not found.");
         mapper.Map(task, existingTask);
 
         await taskRepository.SaveAllAsync(); 
         return existingTask;
     }
+
+    public async Task<bool> DeleteTaskAsync(Guid id)
+    {
+        var existingTask = await taskRepository.GetByIdAsync(id) ?? throw new InvalidOperationException($"Task with id {id} not found.");
+        taskRepository.Delete(existingTask);
+
+        return await taskRepository.SaveAllAsync();
+    }
+
 }

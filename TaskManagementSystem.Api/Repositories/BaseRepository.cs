@@ -17,12 +17,7 @@ public abstract class BaseRepository<T>(AppDbContext context) : IBaseRepository<
 
     public async Task AddRangeAsync(IEnumerable<T> entity) => await DbSet.AddRangeAsync(entity);
 
-    public void Delete(T entity)
-    {
-        var entry = DbSet.Local.FirstOrDefault(e => e == entity);
-        if (entry == null) DbSet.Attach(entity);
-        DbSet.Remove(entity);
-    }
+    public void Delete(T entity) => DbSet.Remove(entity);
 
     public void Attach(T entity) => DbSet.Attach(entity);
 

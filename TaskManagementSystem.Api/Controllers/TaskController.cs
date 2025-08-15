@@ -47,4 +47,18 @@ public class TaskController(ITaskService taskService, IMapper mapper) : Controll
             return NotFound(ex.Message);
         }
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteTaskAsync(Guid id)
+    {
+        try
+        {
+            await taskService.DeleteTaskAsync(id);
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
 }
