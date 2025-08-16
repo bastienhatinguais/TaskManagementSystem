@@ -1,4 +1,5 @@
-﻿@using TaskManagementSystem.Shared.DTOs
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@using TaskManagementSystem.Shared.DTOs
 @using TaskManagementSystem.Shared.DTOs.ToDoTask
 @inject HttpClient Http
 @inject ITaskService TaskService
@@ -22,7 +23,7 @@ else
     <div class="flex flex-col gap-4 rounded p-3">
         @foreach (var task in tasks)
         {
-            <ToDoTaskItem ToDoTask="@task" OnDelete="HandleDelete" OnEdit="HandleEdit"/>
+            <ToDoTaskItem @key="task.Id" ToDoTask="@task" OnDelete="HandleDelete" OnEdit="HandleEdit" />
         }
     </div>
 }
@@ -31,10 +32,22 @@ else
 @code {
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     private List<ToDoTaskDto>? tasks;
+    private HubConnection? hubConnection;
 
     protected override async Task OnInitializedAsync()
     {
         tasks = await TaskService.ListAsync();
+
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl("https://localhost:7069/hubs/task")
+            .WithAutomaticReconnect()
+            .Build();
+
+        hubConnection.On<ToDoTaskDto>("TaskCreated", OnTaskCreated);
+        hubConnection.On<ToDoTaskDto>("TaskUpdated", OnTaskUpdated);
+        hubConnection.On<Guid>("TaskDeleted", OnTaskDeleted);
+
+        await hubConnection.StartAsync();
     }
 
     private void HandleEdit(ToDoTaskDto task)
@@ -48,6 +61,37 @@ else
         if (response.IsSuccessStatusCode)
         {
             tasks?.Remove(task);
+        }
+    }
+
+    private async Task OnTaskCreated(ToDoTaskDto task)
+    {
+        if (tasks != null && !tasks.Any(t => t.Id == task.Id))
+        {
+            tasks.Add(task);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task OnTaskUpdated(ToDoTaskDto task)
+    {
+        if (tasks == null) return;
+        var index = tasks.FindIndex(t => t.Id == task.Id);
+        if (index >= 0)
+        {
+            tasks[index] = task;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task OnTaskDeleted(Guid taskId)
+    {
+        if (tasks == null) return;
+        var task = tasks.FirstOrDefault(t => t.Id == taskId);
+        if (task != null)
+        {
+            tasks.RemoveAll(t => t.Id == taskId);
+            await InvokeAsync(StateHasChanged);
         }
     }
 }
