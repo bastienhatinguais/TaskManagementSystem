@@ -3,6 +3,7 @@
 @using TaskManagementSystem.Shared.DTOs.ToDoTask
 @inject HttpClient Http
 @inject ITaskService TaskService
+@inject IConfiguration Configuration
 
 @if (tasks is null)
 {
@@ -38,8 +39,16 @@ else
     {
         tasks = await TaskService.ListAsync();
 
+        var apiBaseUrl = Configuration["ApiBaseUrl"];
+        var hubEndPoint = Configuration["SignalR:TaskHubEndpoint"];
+
+        if (string.IsNullOrWhiteSpace(apiBaseUrl))
+            throw new InvalidOperationException("Missing ApiBaseUrl in appsettings.json");
+        if (string.IsNullOrWhiteSpace(hubEndPoint))
+            throw new InvalidOperationException("Missing SignalR:TaskHubEndpoint in appsettings.json");
+
         hubConnection = new HubConnectionBuilder()
-            .WithUrl("https://localhost:7069/hubs/task")
+            .WithUrl($"{apiBaseUrl.TrimEnd('/')}/{hubEndPoint.TrimStart('/')}")
             .WithAutomaticReconnect()
             .Build();
 
