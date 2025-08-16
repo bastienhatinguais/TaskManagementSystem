@@ -8,7 +8,7 @@ public class ToDoTaskUpsertDto
     public string Title { get; set; } = string.Empty;
 
     [StringLength(1000)]
-    public string? Description { get; set; }
+    public string? Description { get; set; } = string.Empty;
 
     [Required, DataType(DataType.Date)]
     public DateTime DueDate { get; set; }
