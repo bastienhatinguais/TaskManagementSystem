@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TaskManagementSystem.Api;
+using TaskManagementSystem.Api.Handlers;
 using TaskManagementSystem.Api.Hubs;
 using TaskManagementSystem.Api.Repositories;
 using TaskManagementSystem.Api.Repositories.Interfaces;
@@ -15,6 +16,7 @@ builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ITaskNotificationService, TaskNotificationService>();
 
 builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -24,6 +26,10 @@ builder.Services.AddAutoMapper(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly(
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
+builder.Services.AddExceptionHandler<SaveOperationExceptionHandler>();
+builder.Services.AddExceptionHandler<UnhandledExceptionHandler>();
 
 var app = builder.Build();
 
@@ -36,6 +42,8 @@ if (app.Environment.IsDevelopment())
         x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:7201", "https://localhost:7201");
     });
 }
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 

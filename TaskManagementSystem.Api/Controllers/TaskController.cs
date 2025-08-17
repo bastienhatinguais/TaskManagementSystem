@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TaskManagementSystem.Api.Entities;
+using TaskManagementSystem.Api.Exceptions;
 using TaskManagementSystem.Api.Services.Interfaces;
 using TaskManagementSystem.Shared.DTOs.ToDoTask;
 
@@ -13,10 +13,10 @@ public class TaskController(ITaskService taskService, IMapper mapper) : Controll
     public async Task<IActionResult> GetTaskById(Guid id)
     {
         var task = await taskService.GetTaskByIdAsync(id);
+
         if (task == null)
-        {
-            return NotFound();
-        }
+            return NotFound($"Task with ID {id} was not found.");
+
         return Ok(mapper.Map<ToDoTaskDto>(task));
     }
 
@@ -37,28 +37,14 @@ public class TaskController(ITaskService taskService, IMapper mapper) : Controll
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateTask(Guid id, ToDoTaskUpsertDto task)
     {
-        try
-        {
-            var  updatedTask = await taskService.UpdateTaskAsync(id, task);
-            return Ok(mapper.Map<ToDoTaskDto>(updatedTask));
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        var updatedTask = await taskService.UpdateTaskAsync(id, task);
+        return Ok(mapper.Map<ToDoTaskDto>(updatedTask));
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteTask(Guid id)
     {
-        try
-        {
-            await taskService.DeleteTaskAsync(id);
-            return NoContent();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        await taskService.DeleteTaskAsync(id);
+        return NoContent();
     }
 }
