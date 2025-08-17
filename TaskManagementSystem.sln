@@ -15,6 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagementSystem.Client
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagementSystem.Shared", "TaskManagementSystem.Shared\TaskManagementSystem.Shared.csproj", "{B62126C3-DA79-499D-A412-45950A977BC3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagementSystem.Api.Tests", "TaskManagementSystem.Api.Tests\TaskManagementSystem.Api.Tests.csproj", "{333BD951-9FC1-4D6C-9898-0A21670DA548}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0E2118CD-2D20-4FE1-8E19-01644F793CE7} = {0E2118CD-2D20-4FE1-8E19-01644F793CE7}
+		{B62126C3-DA79-499D-A412-45950A977BC3} = {B62126C3-DA79-499D-A412-45950A977BC3}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +39,10 @@ Global
 		{B62126C3-DA79-499D-A412-45950A977BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B62126C3-DA79-499D-A412-45950A977BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B62126C3-DA79-499D-A412-45950A977BC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{333BD951-9FC1-4D6C-9898-0A21670DA548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{333BD951-9FC1-4D6C-9898-0A21670DA548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{333BD951-9FC1-4D6C-9898-0A21670DA548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{333BD951-9FC1-4D6C-9898-0A21670DA548}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
