@@ -1,4 +1,5 @@
 ﻿@page "/task/{id:guid}/edit"
+@layout ErrorLayout
 @using TaskManagementSystem.Client.Components.ToDoTask
 @using TaskManagementSystem.Shared.DTOs.ToDoTask
 @inject ITaskService TaskService
@@ -6,9 +7,17 @@
 <PageTitle>Edit Task</PageTitle>
 
 <h1 class="text-center text-2xl font-semibold">Edit task</h1>
-<ToDoTaskForm ToDotask="task"
-              Submit="EditTask"
-              Cancel="GoBack" />
+
+@if (task != null)
+{
+    <ToDoTaskForm ToDotask="task"
+    Submit="EditTask"
+    Cancel="GoBack" />
+}
+else
+{
+    <p>loading</p>
+}
 
 @code {
     [Inject] private NavigationManager Navigation { get; set; } = default!;
