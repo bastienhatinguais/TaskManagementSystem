@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Reflection;
 using TaskManagementSystem.Api;
 using TaskManagementSystem.Api.Handlers;
@@ -17,8 +18,16 @@ builder.Services.AddScoped<ITaskNotificationService, TaskNotificationService>();
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+builder.Services.AddDbContext<AppDbContext>((sp, options) =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+    // Change to select your database provider
+    options.UseSqlServer(connectionString);
+    //options.UseSqlite(connectionString);
+});
 
 builder.Services.AddSignalR();
 
