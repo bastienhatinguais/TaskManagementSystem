@@ -25,8 +25,8 @@ builder.Services.AddDbContext<AppDbContext>((sp, options) =>
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
     // Change to select your database provider
-    options.UseSqlServer(connectionString);
-    //options.UseSqlite(connectionString);
+    //options.UseSqlServer(connectionString);
+    options.UseSqlite(connectionString);
 });
 
 builder.Services.AddSignalR();
